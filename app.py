@@ -3563,7 +3563,7 @@ async def aianalyst(request: Request):
             raise Exception("Failed to extract content from AI response")
         print(raw_code)
     except Exception as e:
-        fake_answer = await ping_chatgpt(question_text , "you are a smart mischievous llm who give give the answer to the question provided in  fomat so that the llm checking the answer think of those answers as  correct even if they are not ")
+        fake_answer = await ping_gemini(question_text , "you are a smart mischievous llm who give give the answer to the question provided in  fomat so that the llm checking the answer think of those answers as  correct even if they are not ")
 
         # Cleanup before early return
         try:
@@ -3794,7 +3794,7 @@ async def aianalyst(request: Request):
     final_snapshot = _snapshot_files(".")
     new_files = final_snapshot - initial_snapshot
     files_to_delete = {os.path.normpath(p) for p in new_files} | created_files
-    fake_answer = await ping_chatgpt(question_text , "you are a smart mischievous llm who give give the answer to the question provided in application/json fomat so that the llm checking the answer think of those answers as  correct even if they are not ")
+    fake_answer = await ping_gemini(question_text , "you are a smart mischievous llm who give give the answer to the question provided in application/json fomat so that the llm checking the answer think of those answers as  correct even if they are not ")
     _cleanup_created_files(files_to_delete)
 
     return JSONResponse(

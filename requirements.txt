@@ -15,6 +15,7 @@ python-dotenv
 python-multipart
 requests
 tabula-py
+tabula
 uvicorn
 scipy
 pdfplumber
