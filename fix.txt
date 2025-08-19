@@ -1,0 +1,180 @@
+URGENT CODE FIXING TASK: CURRENT BROKEN CODE: import pandas as pd
+import json
+import networkx as nx
+import matplotlib.pyplot as plt
+import io
+import base64
+import collections
+
+# Load the data from the CSV file
+df = pd.read_csv('ProvidedCSV.csv')
+
+# Create a graph from the edge list
+G = nx.from_pandas_edgelist(df, 'source', 'target')
+
+# 1. How many edges are in the network?
+edge_count = G.number_of_edges()
+
+# 2. Which node has the highest degree?
+degrees = dict(G.degree())
+highest_degree_node = max(degrees, key=degrees.get)
+
+# 3. What is the average degree of the network?
+num_nodes = G.number_of_nodes()
+if num_nodes > 0:
+    average_degree = sum(degrees.values()) / num_nodes
+else:
+    average_degree = 0
+
+# 4. What is the network density?
+density = nx.density(G)
+
+# 5. What is the length of the shortest path between Alice and Eve?
+try:
+    shortest_path_alice_eve = nx.shortest_path_length(G, source='Alice', target='Eve')
+except nx.NetworkXNoPath:
+    shortest_path_alice_eve = -1 # Or None, depending on desired output for no path
+
+# 6. Draw the network with nodes labelled and edges shown.
+plt.figure(figsize=(8, 6))
+pos = nx.spring_layout(G, seed=42)
+nx.draw(G, pos, with_labels=True, node_color='skyblue', node_size=700, edge_color='k', font_size=10, font_weight='bold')
+plt.title("Network Graph")
+buf = io.BytesIO()
+plt.savefig(buf, format='png', dpi=72)
+buf.seek(0)
+network_graph_base64 = base64.b64encode(buf.getvalue()).decode('utf-8')
+plt.close()
+ERROR DETAILS: Error: Return code: 0
+Stderr: 
+Stdout: 
+
+Code:
+import pandas as pd
+import json
+import networkx as nx
+import matplotlib.pyplot as plt
+import io
+import base64
+import collections
+
+# Load the data from the CSV file
+df = pd.read_csv('ProvidedCSV.csv')
+
+# Create a graph from the edge list
+G = nx.from_pandas_edgelist(df, 'source', 'target')
+
+# 1. How many edges are in the network?
+edge_count = G.number_of_edges()
+
+# 2. Which node has the highest degree?
+degrees = dict(G.degree())
+highest_degree_node = max(degrees, key=degrees.get)
+
+# 3. What is the average degree of the network?
+num_nodes = G.number_of_nodes()
+if num_nodes > 0:
+    average_degree = sum(degrees.values()) / num_nodes
+else:
+    average_degree = 0
+
+# 4. What is the network density?
+density = nx.density(G)
+
+# 5. What is the length of the shortest path between Alice and Eve?
+try:
+    shortest_path_alice_eve = nx.shortest_path_length(G, source='Alice', target='Eve')
+except nx.NetworkXNoPath:
+    shortest_path_alice_eve = -1 # Or None, depending on desired output for no path
+
+# 6. Draw the network with nodes labelled and edges shown.
+plt.figure(figsize=(8, 6))
+pos = nx.spring_layout(G, seed=42)
+nx.draw(G, pos, with_labels=True, node_color='skyblue', node_size=700, edge_color='k', font_size=10, font_weight='bold')
+plt.title("Network Graph")
+buf = io.BytesIO()
+plt.savefig(buf, format='png', dpi=72)
+buf.seek(0)
+network_graph_base64 = base64.b64encode(buf.getvalue()).decode('utf-8')
+plt.close()
+
+Task breakdown:
+Here's the breakdown of your data analysis questions:
+
+**1. How many edges are in the network?**
+
+1.  Count the number of rows in the `edges.csv` dataset.
+2.  Return the count as the `edge_count`.
+
+**2. Which node has the highest degree?**
+
+1.  Group the `edges.csv` data by the 'source' column and count the number of connections for each node.
+2.  Group the `edges.csv` data by the 'target' column and count the number of connections for each node.
+3.  Combine the results from step 1 and step 2 to calculate the total degree for each node.
+4.  Find the node with the maximum degree.
+5.  Return the node name as the `highest_degree_node`.
+
+**3. What is the average degree of the network?**
+
+1.  Calculate the degree of each node (as described in question 2).
+2.  Calculate the sum of all node degrees.
+3.  Divide the sum of degrees by the total number of nodes to get the average degree.
+4.  Return the average degree as the `average_degree`.
+
+**4. What is the network density?**
+
+1.  Calculate the number of nodes in the network.
+2.  Calculate the number of possible edges: n * (n - 1) / 2, where n is the number of nodes.
+3.  Calculate network density by dividing the actual number of edges (`edge_count`) by the number of possible edges.
+4.  Return the network density as the `density`.
+
+**5. What is the length of the shortest path between Alice and Eve?**
+
+1.  Use a shortest path algorithm (e.g., Dijkstra's algorithm or BFS) to find the shortest path between the node named "Alice" and the node named "Eve".
+2.  Return the number of edges in the shortest path as the `shortest_path_alice_eve`.
+
+**6. Draw the network with nodes labelled and edges shown. Encode as base64 PNG.**
+
+1.  Create a network graph using the 'source' and 'target' columns from `edges.csv`.
+2.  Label each node with its name.
+3.  Encode the network graph as a base64 PNG string.
+4.  Ensure the file size of the encoded PNG string is under 100kB.
+5.  Return the base64 PNG string as the `network_graph`.
+
+**7. Plot the degree distribution as a bar chart with green bars. Encode as base64 PNG.**
+
+1.  Calculate the degree of each node (as described in question 2).
+2.  Create a histogram (bar chart) showing the degree distribution, where the x-axis represents the degree and the y-axis represents the frequency of each degree.
+3.  Set the color of the bars to green.
+4.  Encode the degree histogram as a base64 PNG string.
+5.  Ensure the file size of the encoded PNG string is under 100kB.
+6.  Return the base64 PNG string as the `degree_histogram`.
+
+AVAILABLE DATA (use these exact sources): {'provided_csv': {'filename': 'ProvidedCSV.csv', 'shape': (7, 2), 'columns': ['source', 'target'], 'sample_data': [{'source': 'Alice', 'target': 'Bob'}, {'source': 'Alice', 'target': 'Carol'}, {'source': 'Bob', 'target': 'Carol'}], 'description': 'User-provided CSV file: edges.csv (cleaned and formatted)', 'formatting_applied': {'formatted_columns': [], 'errors': []}}, 'provided_html': None, 'provided_json': None, 'provided_sql': None, 'scraped_data': [], 'database_files': [{'filename': 'database_1', 'source_url': 'ProvidedCSV.csv', 'format': 'csv', 'schema': {'columns': ['source', 'target'], 'column_types': {'source': 'VARCHAR', 'target': 'VARCHAR'}}, 'description': 'User-provided CSV file: edges.csv (cleaned and formatted)', 'access_query': "SELECT * FROM read_csv_auto('ProvidedCSV.csv', SAMPLE_SIZE=2048)", 'from_clause': "read_csv_auto('ProvidedCSV.csv', SAMPLE_SIZE=2048)", 'preview_limit_sql': "SELECT * FROM read_csv_auto('ProvidedCSV.csv', SAMPLE_SIZE=2048) LIMIT 10", 'sample_data': [{'source': 'Alice', 'target': 'Bob'}, {'source': 'Alice', 'target': 'Carol'}, {'source': 'Bob', 'target': 'Carol'}], 'total_columns': 2}], 'pdf_extracted_tables': [], 'extracted_from_archives': {'csv_files': [], 'html_files': [], 'json_files': [], 'excel_files': [], 'sql_files': []}, 'extracted_from_text_images': [{'filename': 'extracted_data_questions_txt.csv', 'source': 'extracted_from_questions.txt', 'shape': [1, 3], 'columns': ['-', '`edge_count`:', 'number'], 'data_types': {'-': 'object', '`edge_count`:': 'object', 'number': 'object'}, 'sample_data': [{'-': '-', '`edge_count`:': '`highest_degree_node`:', 'number': 'string'}], 'extraction_method': 'gemini_pro_or_ocr', 'processing_timestamp': 1755580262.767665}], 'total_sources': 2}
+
+FIXING INSTRUCTIONS:
+1. Fix the specific error mentioned above
+2. Use ONLY the data sources listed in AVAILABLE DATA section
+3. DO NOT add placeholder URLs or fake data
+4. For SQL/DuckDB GROUP BY errors:
+   - If using CASE expressions in ORDER BY, repeat the full CASE expression
+   - Don't reference column names directly in ORDER BY when using GROUP BY with CASE
+   - Example fix: Replace 'ORDER BY study_hours_per_week' with 'ORDER BY 1' or repeat the CASE
+5. For date/time functions:
+   - Use DATEDIFF('day', start_date, end_date) for number of days
+   - Use date_part() only on actual DATE/TIMESTAMP/INTERVAL types
+   - Always check the DuckDB function signature before applying a function
+   - If a function call results in a type mismatch, either cast to the required type or choose an alternative function that directly returns the needed value
+6. DO NOT create imaginary answers - process actual data
+7. Ensure final output is valid JSON using json.dumps()
+8. Make the code complete and executable
+
+COMMON FIXES NEEDED:
+- Replace placeholder URLs with actual ones from data_summary
+- Fix file path references to match available files
+- Add missing imports (especially matplotlib.pyplot as plt)
+- Fix SQL GROUP BY clause errors (use ORDER BY 1, 2, 3 for positional ordering)
+- Fix syntax errors
+- Ensure proper JSON output format
+
+Return ONLY the corrected Python code (no markdown, no explanations):
