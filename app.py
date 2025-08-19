@@ -3713,7 +3713,7 @@ async def aianalyst(request: Request):
             # fixed_code = extract_content_from_response(horizon_fix)
 
 
-            gemini_fix = await ping_gemini_pro(fix_prompt, "You are a helpful Python code fixer. Don't try to code from scratch. Just fix the error. SEND FULL CODE WITH CORRECTION APPLIED")
+            gemini_fix = await ping_gemini(fix_prompt, "You are a helpful Python code fixer. Don't try to code from scratch. Just fix the error. SEND FULL CODE WITH CORRECTION APPLIED")
             fixed_code = gemini_fix
 
             if not fixed_code:
